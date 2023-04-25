@@ -1,6 +1,8 @@
-# OpenAI API Quickstart - Python example app
+# Build-a-YouTube - for AI ethics curriculum YouTube and You
 
-This is an example pet name generator app used in the OpenAI API [quickstart tutorial](https://beta.openai.com/docs/quickstart). It uses the [Flask](https://flask.palletsprojects.com/en/2.0.x/) web framework. Check out the tutorial or follow the instructions below to get set up.
+YouTube and You is a curriculum designed for 7th grade science classes that adheres to the Massachusetts Science and Technology/ Engineering Curriculum Framework (2016). Build-a-YouTube is an activity in Day 4 of the 2-week curriculum. For more details about the curriculum, please [visit this Google Folder](https://drive.google.com/drive/folders/1_BdoUng8V2OL-bTBaDItMBta1Gh4mD9n?usp=sharing)
+
+This web application is developed using the OpenAI API quickstart example as a framework. Follow the instructions below to get set up.
 
 ## Setup
 
@@ -11,7 +13,7 @@ This is an example pet name generator app used in the OpenAI API [quickstart tut
 3. Navigate into the project directory:
 
    ```bash
-   $ cd openai-quickstart-python
+   $ cd build-a-youtube
    ```
 
 4. Create a new virtual environment:
@@ -41,4 +43,4 @@ This is an example pet name generator app used in the OpenAI API [quickstart tut
    $ flask run
    ```
 
-You should now be able to access the app at [http://localhost:5000](http://localhost:5000)! For the full context behind this example app, check out the [tutorial](https://beta.openai.com/docs/quickstart).
+You should now be able to access the app at [http://localhost:5000](http://localhost:5000)!

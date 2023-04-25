@@ -57,7 +57,7 @@ def rate(videos, criteria):
     response = openai.Completion.create(
         model=MODEL_NAME,
         prompt=prompt,
-        temperature=0.1,
+        temperature=0.5,
         max_tokens=500,
         top_p=1,
         frequency_penalty=0,
@@ -66,7 +66,10 @@ def rate(videos, criteria):
     ratings = response.choices[0].text.strip()
     ratings = ratings.strip("[")
     ratings = ratings.strip("]")
+    print(ratings)
     ratings_list = [float(rating) for rating in ratings.split(", ")]
+    ratings_list = ratings_list[:20] #sometimes openAI returns 21 numbers instead
+
     print(ratings_list)
     for i, rating in enumerate(ratings_list):
         videos[i]["rating"] = rating

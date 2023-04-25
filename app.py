@@ -44,13 +44,13 @@ def index():
 #rate function    
 def rate(videos, criteria):
     if any(substring in criteria for substring in ["like", "engagement", "view"]):
-        prompt = f'Rate the following videos with these title, tags, views, and likes by the following criteria - {criteria} - from 0 to 1 in 2 decimal points and return only their ratings as a list of 2 decimal point floats. Assume that a video with a higher like count should receive a higher rating:\n\n'
+        prompt = f'Rate the following videos with these title, tags, like counts, and view by the following criteria - {criteria} - from 0 to 1 in 2 decimal points and return only their ratings as a list of 2 decimal point floats. A video with higher like count should receive a higher rating:\n\n'
     else:
-        prompt = f'Rate the following videos with these title, tags, views, and likes by the following criteria - {criteria} - from 0 to 1 in 2 decimal points and return only their ratings as a list of 2 decimal point floats. The more the video title and tags match with the criteria, the higher the rating:\n\n'
+        prompt = f'Rate the following videos with these title, tags, like counts, and view by the following criteria - {criteria} - from 0 to 1 in 2 decimal points and return only their ratings as a list of 2 decimal point floats. A video with video title and tags more relevant to the criter should receive a higher rating:\n\n'
     for i, video in enumerate(videos):
         prompt += f"{i+1}: "
         prompt += f"{video['title']}"
-        prompt += f"Tags: {video['tags']}"
+        prompt += f" Tags: {video['tags']}"
         prompt += f" Like count: {video['likes']} "
         prompt += f"Views: {video['views']}\n"
     print(prompt)

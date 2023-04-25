@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <head>
-  <title>OpenAI Quickstart</title>
+  <title>Interactive Algorithm Builder</title>
   <link
     rel="shortcut icon"
-    href="{{ url_for('static', filename='dog.png') }}"
+    href="{{ url_for('static', filename='Youtube_logo.png') }}"
   />
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 </head>
 
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-  <h3>Name my pet</h3>
+  <img src="{{ url_for('static', filename='Youtube_logo.png') }}" class="icon" />
+  <h3>Recommend me some videos</h3>
   <form action="/" method="post">
-    <input type="text" name="animal" placeholder="Enter an animal" required />
-    <input type="submit" value="Generate names" />
+    <input type="text" name="criteria" placeholder="What criteria are you optimizing for?" required />
+    <input type="submit" value="Generate recommendations" />
   </form>
   {% if result %}
-  <div class="result">{{ result }}</div>
+  <table class="result">
+      <thead>
+          <tr>
+            <th></th>  
+            <th></th>
+            <th>Likes</th>
+            <th>Views</th>
+            <th>Rating by your algorithm</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for row in result %}
+              <tr>
+                <td><img src="{{ row['thumbnail_link'] }}" alt="{{ row['title'] }}"></td>  
+                <td>{{ row['title'] }}</td>
+                <td>{{ row['likes'] }}</td>
+                <td>{{ row['views'] }}</td>
+                <td>{{ row['rating'] }}</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
   {% endif %}
 </body>
+

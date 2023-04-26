@@ -37,7 +37,7 @@ def index():
         # Keep only the top 5 videos
         sorted_data = sorted_data[:5]
 
-        return render_template("index.html", result=sorted_data, loading_time=loading_time)   
+        return render_template("index.html", result=sorted_data)   
     
     return render_template("index.html")
     

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <head>
   <title>Interactive Algorithm Builder</title>
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   <link
     rel="shortcut icon"
     href="{{ url_for('static', filename='Youtube_logo.png') }}"
@@ -14,11 +13,7 @@
   <h3>Recommend me some videos</h3>
   <form id="recommendation-form" action="/" method="post">
     <input type="text" name="criteria" placeholder="What criteria are you optimizing for?" required />
-    <input type="submit" onclick="startLoading()" value="Generate recommendations" />
-    <div id="loading" style="display:none;">
-      <img src="{{ url_for('static', filename='loading.gif') }}" alt="Loading..." />
-      <p id="loading-text"></p>
-    </div>
+    <input type="submit" value="Generate recommendations" />
   </form>
   {% if result %}
   <table class="result">

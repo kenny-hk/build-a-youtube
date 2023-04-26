@@ -2,6 +2,7 @@ import os
 import csv
 import openai
 from flask import Flask, redirect, render_template, request, url_for
+from datetime import datetime
 
 MODEL_NAME = "text-davinci-003"
 
@@ -28,7 +29,6 @@ def index():
         criteria = request.form["criteria"]
         
         # Apply rate function to each row's title and store the summary in a new list
-        
         rate (videos, criteria)
 
         #Sort the data by criteria in descending order
@@ -37,41 +37,56 @@ def index():
         # Keep only the top 5 videos
         sorted_data = sorted_data[:5]
 
-        return render_template("index.html", result=sorted_data)   
+        return render_template("index.html", result=sorted_data, loading_time=loading_time)   
     
     return render_template("index.html")
     
 #rate function    
 def rate(videos, criteria):
-    if any(substring in criteria for substring in ["like", "engagement", "view"]):
-        prompt = f'Rate the following videos with these title, tags, like counts, and view by the following criteria - {criteria} - from 0 to 1 in 2 decimal points and return only their ratings as a list of 2 decimal point floats. A video with higher like count should receive a higher rating:\n\n'
-    else:
-        prompt = f'Rate the following videos with these title, tags, like counts, and view by the following criteria - {criteria} - from 0 to 1 in 2 decimal points and return only their ratings as a list of 2 decimal point floats. A video with video title and tags more relevant to the criter should receive a higher rating:\n\n'
-    for i, video in enumerate(videos):
-        prompt += f"{i+1}: "
-        prompt += f"{video['title']}"
-        prompt += f" Tags: {video['tags']}"
-        prompt += f" Like count: {video['likes']} "
-        prompt += f"Views: {video['views']}\n"
-    print(prompt)
-    response = openai.Completion.create(
-        model=MODEL_NAME,
-        prompt=prompt,
-        temperature=0.5,
-        max_tokens=500,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-    )
-    ratings = response.choices[0].text.strip()
-    ratings = ratings.strip("[")
-    ratings = ratings.strip("]")
-    print(ratings)
-    ratings_list = [float(rating) for rating in ratings.split(", ")]
-    ratings_list = ratings_list[:20] #sometimes openAI returns 21 numbers instead
+    #one big prompt for anything like, engagement, or view related for easier comparison and rating
+    if any(substring in criteria for substring in ["like", "engage", "view"]):
+        prompt= f'Rate the following videos with these title, like counts, and view by the following criteria - {criteria} - from 0 to 1 in 2 decimal points and return only their ratings as a list of 2 decimal point floats, a video with higher like count should receive a higher rating:\n'
+        for i, video in enumerate(videos):
+            prompt += f"{i+1}: "
+            prompt += f"{video['title']}"
+            prompt += f" (Like count: {video['likes']}; "
+            prompt += f"Views: {video['views']})\n"
+        print(prompt)
+        response = openai.Completion.create(
+            model=MODEL_NAME,
+            prompt=prompt,
+            temperature=0.2,
+            max_tokens=100,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        print(response.choices[0])
+        ratings = response.choices[0].text.strip()
+        ratings = ratings.strip("[")
+        ratings = ratings.strip("]")
+        print(ratings)
+        ratings_list = [float(rating) for rating in ratings.split(", ")]
+        ratings_list = ratings_list[:20] #sometimes openAI returns 21 numbers instead
 
-    print(ratings_list)
-    for i, rating in enumerate(ratings_list):
-        videos[i]["rating"] = rating
-    
+        print(ratings_list)
+        for i, rating in enumerate(ratings_list):
+            videos[i]["rating"] = rating
+    else:
+        #Individualized rating for everything else for higher accuracy
+        for i, video in enumerate(videos):
+            prompt = f'Rate a video by the criteria of {criteria}. The title of the video is "{video["title"]}" and its like count is {video["likes"]}. The tags include {video["tags"]}. Return only a ratings of 2 decimal point between 0 and 1. A video with video title and tags more relevant to the criteria should receive a higher rating.'
+            print(prompt)
+            response = openai.Completion.create(
+                model=MODEL_NAME,
+                prompt=prompt,
+                temperature=0.2,
+                max_tokens=100,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0
+            )
+            rating = response.choices[0].text.strip()
+            print(rating)
+            videos[i]["rating"] = rating 
     return videos

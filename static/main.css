@@ -102,3 +102,18 @@ input[type="submit"] {
 .result td:last-child {
   border-right: none;
 }
+
+#loading {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#loading img {
+  width: 50px;
+  height: 50px;
+}
+
+#loading p {
+  font-size: 16px;
+  margin-top: 10px;
+}

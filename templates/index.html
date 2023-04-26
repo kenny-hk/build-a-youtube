@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
   <title>Interactive Algorithm Builder</title>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   <link
     rel="shortcut icon"
     href="{{ url_for('static', filename='Youtube_logo.png') }}"
@@ -11,9 +12,13 @@
 <body>
   <img src="{{ url_for('static', filename='Youtube_logo.png') }}" class="icon" />
   <h3>Recommend me some videos</h3>
-  <form action="/" method="post">
+  <form id="recommendation-form" action="/" method="post">
     <input type="text" name="criteria" placeholder="What criteria are you optimizing for?" required />
-    <input type="submit" value="Generate recommendations" />
+    <input type="submit" onclick="startLoading()" value="Generate recommendations" />
+    <div id="loading" style="display:none;">
+      <img src="{{ url_for('static', filename='loading.gif') }}" alt="Loading..." />
+      <p id="loading-text"></p>
+    </div>
   </form>
   {% if result %}
   <table class="result">
@@ -40,4 +45,18 @@
   </table>
   {% endif %}
 </body>
+<script>
+  const form = document.getElementById("recommendation-form");
+  const loadingTimeSpan = document.getElementById("loading-time");
+
+  form.addEventListener("submit", (event) => {
+    const startTime = new Date().getTime(); // capture the start time before form submission
+    setTimeout(() => {
+      const endTime = new Date().getTime(); // capture the end time after the form has been submitted and processed
+      const loadingTime = (endTime - startTime) / 1000; // calculate the loading time in seconds
+      loadingTimeSpan.textContent = `Loading time: ${loadingTime} seconds.`; // update the span tag with the loading time
+    }, 0);
+  });
+</script>
+
 
